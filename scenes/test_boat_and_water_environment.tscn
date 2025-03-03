@@ -1,0 +1,100 @@
+[gd_scene load_steps=16 format=3 uid="uid://ca7ul8uae504d"]
+
+[ext_resource type="Shader" path="res://shaders/water.gdshader" id="1_4qmil"]
+[ext_resource type="PackedScene" uid="uid://btupnhnhxq1f8" path="res://scenes/boat_scene.tscn" id="2_8p3my"]
+[ext_resource type="Script" path="res://scripts/water_plane.gd" id="2_bnqq8"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_77ten"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_m5puh"]
+sky_material = SubResource("ProceduralSkyMaterial_77ten")
+
+[sub_resource type="Environment" id="Environment_rr7ax"]
+background_mode = 2
+sky = SubResource("Sky_m5puh")
+tonemap_mode = 2
+glow_enabled = true
+fog_enabled = true
+fog_mode = 1
+fog_light_energy = 0.71
+fog_density = 1.0
+fog_depth_curve = 0.466516
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_0i26n"]
+noise_type = 4
+frequency = 0.0315
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_h3cav"]
+noise = SubResource("FastNoiseLite_0i26n")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kqjbv"]
+frequency = 0.0072
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_c3f5l"]
+noise = SubResource("FastNoiseLite_kqjbv")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_bdnhb"]
+noise_type = 3
+frequency = 0.0193
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1x67w"]
+noise = SubResource("FastNoiseLite_bdnhb")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fam84"]
+render_priority = 0
+shader = ExtResource("1_4qmil")
+shader_parameter/albedo = Color(0, 0.415686, 0.596078, 1)
+shader_parameter/scroll_speed1 = Vector2(0.05, 0)
+shader_parameter/scroll_speed2 = Vector2(-0.03, 0)
+shader_parameter/blend_factor = 0.5
+shader_parameter/scale1 = Vector2(1, 1)
+shader_parameter/scale2 = Vector2(1, 1)
+shader_parameter/wave_strength = 1.0
+shader_parameter/wave_scale = 0.02
+shader_parameter/wave_time = 0.0
+shader_parameter/pixelation_level = 128
+shader_parameter/FoamSize = 0.5
+shader_parameter/WaterOpacity = 1.0
+shader_parameter/FoamGlowIntensity = 0.5
+shader_parameter/water_texture1 = SubResource("NoiseTexture2D_c3f5l")
+shader_parameter/water_texture2 = SubResource("NoiseTexture2D_1x67w")
+shader_parameter/noise_texture = SubResource("NoiseTexture2D_h3cav")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_w0mua"]
+material = SubResource("ShaderMaterial_fam84")
+size = Vector2(100, 100)
+subdivide_width = 10
+subdivide_depth = 10
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_r5qch"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[node name="TestBoatAndWaterEnvironment" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rr7ax")
+
+[node name="Boat" parent="." node_paths=PackedStringArray("waterPlane") instance=ExtResource("2_8p3my")]
+waterPlane = NodePath("../WaterPlane")
+float_force = 3.0
+water_drag = null
+water_angular_drag = null
+
+[node name="WaterPlane" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_w0mua")
+script = ExtResource("2_bnqq8")
+noise = SubResource("NoiseTexture2D_h3cav")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_r5qch")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.995762, 0, 0.0919708, 0, 1, 0, -0.0919708, 0, 0.995762, 0, 1.15698, 5.66859)
