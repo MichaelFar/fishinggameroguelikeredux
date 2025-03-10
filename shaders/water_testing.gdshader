@@ -16,19 +16,82 @@ uniform float wave_time = 0.0;
 uniform int pixelation_level = 64;
 uniform float FoamSize = 0.5;
 uniform sampler2D DepthTexture : hint_depth_texture;
+
 uniform float WaterOpacity = 1.0;
 uniform float FoamGlowIntensity = 0.5;
+
+
+//uniform float wavelength = 20;
+uniform float amplitude = 2.0;
+uniform float speed = 13;
+//uniform float steepness = 0.3;
+uniform vec2 direction = vec2(1);
+
+uniform vec4 WaveA = vec4(1,0,0.5,30);
+uniform vec4 WaveB = vec4(1,1,0.25,20);
+uniform vec4 WaveC = vec4(1,1,0.25,20);
+
 varying vec3 global_position;
 varying float noise_value;
-varying vec3 normal;
+//varying vec3 normal;
+
+vec3 GerstnerWave (vec4 wave, vec3 p, inout vec3 tangent, inout vec3 binormal)
+{
+			float steepness = wave.z;
+		    float wavelength = wave.w;
+
+
+		//TANGENT = normalize(
+				//vec3(1.0 - steepness * sin(f),
+				//steepness * cos(f),
+				//0.0));
+
+		    float k = 2.0 * PI / wavelength;
+			float c = sqrt(9.8 / k);
+			vec2 d = normalize(wave.xy);
+			float f = k * (dot(d,p.xz) - c * TIME);
+			float a = steepness / k;
+
+			//VERTEX.y = amplitude * sin(k * VERTEX.x + TIME);
+			p.x += a * cos(f);
+			p.y = a * sin(f);
+
+			//p.x += d.x * (a * cos(f));
+			//p.y = a * sin(f);
+			//p.z += d.y * (a * cos(f));
+
+			tangent += vec3(
+				-d.x * d.x * (steepness * sin(f)),
+				d.x * (steepness * cos(f)),
+				-d.x * d.y * (steepness * sin(f))
+			);
+			binormal += vec3(
+				-d.x * d.y * (steepness * sin(f)),
+				d.y * (steepness * cos(f)),
+				-d.y * d.y * (steepness * sin(f))
+			);
+			return vec3(
+				d.x * (a * cos(f)),
+				a * sin(f),
+				d.y * (a * cos(f))
+			);
+		}
 void vertex() {
-    global_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-    noise_value = texture(noise_texture, global_position.xz * wave_scale).r;
-    float wave = sin(global_position.x * 0.2 + global_position.z * 0.2 + wave_time + noise_value * 10.0) * wave_strength;
-    VERTEX.y += wave;
-	normal = NORMAL;
+
+
+	vec3 gridPoint = VERTEX.xyz;
+	vec3 tangent = vec3(1, 0, 0);
+	vec3 binormal = vec3(0, 0, 1);
+	vec3 p = gridPoint;
+	p += GerstnerWave(WaveA, p, tangent, binormal);
+	p += GerstnerWave(WaveB, p, tangent, binormal);
+	p += GerstnerWave(WaveC, p, tangent, binormal);
+	vec3 normal = normalize(cross(binormal, tangent));
+	VERTEX.xyz = p;
+	NORMAL = normal;
 
 }
+
 
 void fragment() {
     vec2 scaledUV1 = UV * scale1;

@@ -25,9 +25,10 @@ func _ready():
 	noiseImage = noise.noise.get_image(noise.get_height(),noise.get_width())
 	print("noise image is "+str(noiseImage))
 	#waveSpeed = material.get_shader_parameter()
-	heightScale = material.get_shader_parameter("wave_strength")
+	heightScale = 2 * material.get_shader_parameter("wave_strength")
 	waveScale = material.get_shader_parameter("wave_scale")
 	#noiseValue = material.get_shader_parameter("noise_value")
+	material.set_shader_parameter("noise_texture", noise)
 func _process(delta):
 	time += delta
 	material.set_shader_parameter("wave_time", time)
@@ -36,6 +37,7 @@ func _process(delta):
 func get_height(world_position : Vector3) ->float:
 	
 	#var noise_value = texture(noise, world_position.xy * waveScale).r;
+	noiseValue = wrapf(noiseValue,0,1)
 	var uv_x = wrapf(sin(world_position.x * 0.2 + time + noiseValue * 10.0) * heightScale,0,1);
 	var uv_y = wrapf(sin(world_position.z * 0.2 + time + noiseValue * 10.0) * heightScale,0,1);
 	
