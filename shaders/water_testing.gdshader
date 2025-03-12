@@ -30,6 +30,9 @@ uniform vec2 direction = vec2(1);
 uniform vec4 WaveA = vec4(1,0,0.5,30);
 uniform vec4 WaveB = vec4(1,1,0.25,20);
 uniform vec4 WaveC = vec4(1,1,0.25,20);
+uniform vec4 WaveD = vec4(1,1,0.25,20);
+uniform vec4 WaveE = vec4(1,1,0.25,20);
+
 
 varying vec3 global_position;
 varying float noise_value;
@@ -39,19 +42,15 @@ vec3 GerstnerWave (vec4 wave, vec3 p, inout vec3 tangent, inout vec3 binormal)
 {
 			float steepness = wave.z;
 		    float wavelength = wave.w;
-
-
-		//TANGENT = normalize(
-				//vec3(1.0 - steepness * sin(f),
-				//steepness * cos(f),
-				//0.0));
-
 		    float k = 2.0 * PI / wavelength;
 			float c = sqrt(9.8 / k);
 			vec2 d = normalize(wave.xy);
 			float f = k * (dot(d,p.xz) - c * TIME);
 			float a = steepness / k;
-
+			tangent = normalize(
+				vec3(1.0 - steepness * sin(f),
+				steepness * cos(f),
+				0.0));
 			//VERTEX.y = amplitude * sin(k * VERTEX.x + TIME);
 			p.x += a * cos(f);
 			p.y = a * sin(f);
@@ -78,7 +77,6 @@ vec3 GerstnerWave (vec4 wave, vec3 p, inout vec3 tangent, inout vec3 binormal)
 		}
 void vertex() {
 
-
 	vec3 gridPoint = VERTEX.xyz;
 	vec3 tangent = vec3(1, 0, 0);
 	vec3 binormal = vec3(0, 0, 1);
@@ -86,9 +84,12 @@ void vertex() {
 	p += GerstnerWave(WaveA, p, tangent, binormal);
 	p += GerstnerWave(WaveB, p, tangent, binormal);
 	p += GerstnerWave(WaveC, p, tangent, binormal);
+	p += GerstnerWave(WaveD, p, tangent, binormal);
+	p += GerstnerWave(WaveE, p, tangent, binormal);
 	vec3 normal = normalize(cross(binormal, tangent));
 	VERTEX.xyz = p;
 	NORMAL = normal;
+	TANGENT = tangent;
 
 }
 
@@ -98,26 +99,29 @@ void fragment() {
     vec2 scaledUV2 = UV * scale2;
     vec2 scrolledUV1 = scaledUV1 + scroll_speed1 * TIME;
     vec2 scrolledUV2 = scaledUV2 + scroll_speed2 * TIME;
-    scrolledUV1 = mod(scrolledUV1, vec2(1.0, 1.0));
-    scrolledUV2 = mod(scrolledUV2, vec2(1.0, 1.0));
-    scrolledUV1 = floor(scrolledUV1 * float(pixelation_level)) / float(pixelation_level);
-    scrolledUV2 = floor(scrolledUV2 * float(pixelation_level)) / float(pixelation_level);
-
+    //scrolledUV1 = mod(scrolledUV1, vec2(1.0, 1.0));
+    //scrolledUV2 = mod(scrolledUV2, vec2(1.0, 1.0));
+    //scrolledUV1 = floor(scrolledUV1 * float(pixelation_level)) / float(pixelation_level);
+    //scrolledUV2 = floor(scrolledUV2 * float(pixelation_level)) / float(pixelation_level);
+//
     vec4 water_color1 = texture(water_texture1, scrolledUV1);
     vec4 water_color2 = texture(water_texture2, scrolledUV2);
     vec4 blended_water_color = mix(water_color1, water_color2, blend_factor);
-
-    float depthValue = texture(DepthTexture, SCREEN_UV).r;
-    vec4 worldPosition = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depthValue, 1.0);
-    worldPosition.xyz /= worldPosition.w;
-    float foamEffect = clamp(1.0 - smoothstep(worldPosition.z + FoamSize, worldPosition.z, VERTEX.z), 0.0, 1.0);
-    float foamOpacity = 1.0 - foamEffect;
-    float foamEffectRounded = round(foamOpacity);
-    float finalOpacity = foamEffectRounded + WaterOpacity;
+//
+    //float depthValue = texture(DepthTexture, SCREEN_UV).r;
+    //vec4 worldPosition = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depthValue, 1.0);
+    //worldPosition.xyz /= worldPosition.w;
+    //float foamEffect = clamp(1.0 - smoothstep(worldPosition.z + FoamSize, worldPosition.z, VERTEX.z), 0.0, 1.0);
+    //float foamOpacity = 1.0 - foamEffect;
+    //float foamEffectRounded = round(foamOpacity);
+    //float finalOpacity = foamEffectRounded + WaterOpacity;
 
     ALBEDO = blended_water_color.rgb * albedo;
-    ALPHA = finalOpacity;
-    EMISSION = vec3(foamEffectRounded) * FoamGlowIntensity;
+	
+    //ALPHA = finalOpacity;
+	//ALPHA = blended_water_color.a / COLOR.a; 
+    //EMISSION = vec3(foamEffectRounded) * FoamGlowIntensity;
     METALLIC = 0.0;
     ROUGHNESS = 1.0;
+	
 }
