@@ -1,7 +1,7 @@
 shader_type spatial;
-render_mode blend_mix, depth_draw_opaque, cull_back, diffuse_lambert, specular_schlick_ggx;
+render_mode blend_mix, depth_prepass_alpha, cull_back, diffuse_lambert, specular_schlick_ggx;
 
-uniform vec3 albedo : source_color;
+uniform vec4 albedo : source_color;
 uniform sampler2D water_texture1;
 uniform sampler2D water_texture2;
 uniform sampler2D noise_texture;
@@ -108,18 +108,19 @@ void fragment() {
     vec4 water_color2 = texture(water_texture2, scrolledUV2);
     vec4 blended_water_color = mix(water_color1, water_color2, blend_factor);
 //
-    //float depthValue = texture(DepthTexture, SCREEN_UV).r;
-    //vec4 worldPosition = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depthValue, 1.0);
-    //worldPosition.xyz /= worldPosition.w;
-    //float foamEffect = clamp(1.0 - smoothstep(worldPosition.z + FoamSize, worldPosition.z, VERTEX.z), 0.0, 1.0);
-    //float foamOpacity = 1.0 - foamEffect;
-    //float foamEffectRounded = round(foamOpacity);
-    //float finalOpacity = foamEffectRounded + WaterOpacity;
+    float depthValue = texture(DepthTexture, SCREEN_UV).r;
+    vec4 worldPosition = INV_VIEW_MATRIX * INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depthValue, 1.0);
+    worldPosition.xyz /= worldPosition.w;
+	float linear_depth = -worldPosition.z;
+    float foamEffect = clamp(1.0 - smoothstep(worldPosition.z + FoamSize, worldPosition.z, VERTEX.z), 0.0, 1.0);
+    float foamOpacity = 1.0 - foamEffect;
+    float foamEffectRounded = round(foamOpacity);
+    float finalOpacity = foamEffectRounded + WaterOpacity;
 
-    ALBEDO = blended_water_color.rgb * albedo;
-	
-    //ALPHA = finalOpacity;
-	//ALPHA = blended_water_color.a / COLOR.a; 
+    ALBEDO =  blended_water_color.rgb * albedo.rgb;
+	ALPHA = water_color1.a;
+    ALPHA = finalOpacity;
+	ALPHA = blended_water_color.a / COLOR.a; 
     //EMISSION = vec3(foamEffectRounded) * FoamGlowIntensity;
     METALLIC = 0.0;
     ROUGHNESS = 1.0;
