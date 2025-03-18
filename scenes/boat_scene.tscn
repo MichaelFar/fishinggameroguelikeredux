@@ -1,9 +1,7 @@
-[gd_scene load_steps=13 format=4 uid="uid://btupnhnhxq1f8"]
+[gd_scene load_steps=12 format=4 uid="uid://btupnhnhxq1f8"]
 
 [ext_resource type="Material" uid="uid://br83t5tyefwag" path="res://materials/WoodFloorMaterial.tres" id="1_jx2cf"]
 [ext_resource type="Script" uid="uid://dtdqcvxy7ccdw" path="res://scripts/boat.gd" id="1_oxdq6"]
-
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_xm3pv"]
 
 [sub_resource type="Animation" id="Animation_o0so7"]
 resource_name = "Take 001"
@@ -67,11 +65,11 @@ size = Vector3(6.56592, 4.52136, 1)
 size = Vector3(12.3933, 1.29773, 5.51373)
 
 [node name="RigidBody3D" type="RigidBody3D" node_paths=PackedStringArray("probeContainer")]
-mass = 6.0
-physics_material_override = SubResource("PhysicsMaterial_xm3pv")
-gravity_scale = 0.5
+mass = 5.0
+angular_damp = 1.0
 script = ExtResource("1_oxdq6")
-float_force = 10.0
+float_force = 500.0
+water_angular_drag = 0.8
 probeContainer = NodePath("Boat/ProbeContainer")
 
 [node name="Boat" type="Node3D" parent="."]
@@ -94,19 +92,31 @@ libraries = {
 }
 
 [node name="ProbeContainer" type="Node3D" parent="Boat"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.27578, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.472073, 0)
 
 [node name="Marker3D3" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.601309, -6.17308, -0.742078, 1.43582)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.71701, -6.17741, -0.961812, 1.68875)
 
 [node name="Marker3D6" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.601309, -6.13263, -0.742078, -1.09192)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.71701, -6.17741, -0.961812, -1.7661)
 
-[node name="Marker3D11" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.7999, -0.775146, 1.59144)
+[node name="Marker3D7" type="Marker3D" parent="Boat/ProbeContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.71701, -2.76164, -0.997601, -3.43406)
 
 [node name="Marker3D8" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.15158, -0.782519, -1.23904)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.71701, -2.76164, -0.997601, 3.64838)
+
+[node name="Marker3D9" type="Marker3D" parent="Boat/ProbeContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.71701, 1.95184, -0.997601, -3.43406)
+
+[node name="Marker3D10" type="Marker3D" parent="Boat/ProbeContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.71701, 1.95184, -0.997601, 3.64838)
+
+[node name="Marker3D4" type="Marker3D" parent="Boat/ProbeContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.35913, 5.75294, -0.881693, -2.06345)
+
+[node name="Marker3D5" type="Marker3D" parent="Boat/ProbeContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.35913, 5.75294, -0.881693, 2.14111)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0306476, 0.811616, -2.28053)

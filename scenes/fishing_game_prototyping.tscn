@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://bukudojyexrx3"]
+[gd_scene load_steps=16 format=3 uid="uid://bukudojyexrx3"]
 
 [ext_resource type="Shader" uid="uid://de84if8eevng5" path="res://shaders/water_testing.gdshader" id="1_ljlh8"]
 
@@ -7,22 +7,39 @@
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_8aa0j"]
 noise = SubResource("FastNoiseLite_ljlh8")
 
+[sub_resource type="Gradient" id="Gradient_8aa0j"]
+colors = PackedColorArray(0.937255, 0.0470588, 0.054902, 1, 0.513726, 0.960784, 0.321569, 1)
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_yqisv"]
+noise_type = 2
+frequency = 0.0093
+fractal_type = 2
+fractal_lacunarity = 9.0
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_hnwk1"]
 seamless = true
+seamless_blend_skirt = 0.14
+color_ramp = SubResource("Gradient_8aa0j")
 noise = SubResource("FastNoiseLite_yqisv")
 
+[sub_resource type="Gradient" id="Gradient_hnwk1"]
+colors = PackedColorArray(0.490196, 0.686275, 0, 1, 0.976471, 0.105882, 0.152941, 1)
+
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_3o7yc"]
+noise_type = 3
+frequency = 0.0032
+fractal_type = 2
+fractal_octaves = 8
 
 [sub_resource type="NoiseTexture2D" id="NoiseTexture2D_d5mx7"]
 seamless = true
+color_ramp = SubResource("Gradient_hnwk1")
 noise = SubResource("FastNoiseLite_3o7yc")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_pauh2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_d5mx7"]
 render_priority = 0
 shader = ExtResource("1_ljlh8")
-shader_parameter/albedo = Color(0.848925, 0.582506, 0.88884, 1)
+shader_parameter/albedo = Color(0.19142, 0.552498, 0.945033, 1)
 shader_parameter/water_texture1 = SubResource("NoiseTexture2D_hnwk1")
 shader_parameter/water_texture2 = SubResource("NoiseTexture2D_d5mx7")
 shader_parameter/noise_texture = SubResource("NoiseTexture2D_8aa0j")
@@ -34,73 +51,21 @@ shader_parameter/scale2 = Vector2(1, 1)
 shader_parameter/wave_strength = 1.0
 shader_parameter/wave_scale = 0.02
 shader_parameter/wave_time = 0.0
-shader_parameter/pixelation_level = 256
-shader_parameter/FoamSize = 0.5
+shader_parameter/pixelation_level = 512
+shader_parameter/FoamSize = 0.9
 shader_parameter/WaterOpacity = 1.0
 shader_parameter/FoamGlowIntensity = 0.5
 shader_parameter/amplitude = 2.0
 shader_parameter/speed = 13.0
 shader_parameter/direction = Vector2(1, 1)
-shader_parameter/WaveA = Vector4(0.3, 0, 0.4, 25)
-shader_parameter/WaveB = Vector4(-1, -1, 0.4, 70)
-shader_parameter/WaveC = Vector4(5, -1, 0.55, 50)
-shader_parameter/WaveD = Vector4(2, 1, 0.25, 60)
-shader_parameter/WaveE = Vector4(-4, -1, 0.2, 80)
+shader_parameter/WaveA = Vector4(0.3, 0, 0.1, 25)
+shader_parameter/WaveB = Vector4(-1, -1, 0.8, 20)
+shader_parameter/WaveC = Vector4(-30, -1, 0.6, 10)
+shader_parameter/WaveD = Vector4(-2, 1, 0.1, 10)
+shader_parameter/WaveE = Vector4(-9, -1, 0.2, 30)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_t27ug"]
-material = SubResource("ShaderMaterial_pauh2")
-size = Vector2(100, 100)
-subdivide_width = 100
-subdivide_depth = 100
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_2bpss"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ucndb"]
-noise = SubResource("FastNoiseLite_2bpss")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_k1b2e"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_e2nb7"]
-seamless = true
-noise = SubResource("FastNoiseLite_k1b2e")
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_prl7c"]
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_1qpcu"]
-seamless = true
-noise = SubResource("FastNoiseLite_prl7c")
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_en2cn"]
-render_priority = 0
-shader = ExtResource("1_ljlh8")
-shader_parameter/albedo = Color(0.286275, 0.415686, 0.505882, 1)
-shader_parameter/water_texture1 = SubResource("NoiseTexture2D_e2nb7")
-shader_parameter/water_texture2 = SubResource("NoiseTexture2D_1qpcu")
-shader_parameter/noise_texture = SubResource("NoiseTexture2D_ucndb")
-shader_parameter/scroll_speed1 = Vector2(0.05, 0)
-shader_parameter/scroll_speed2 = Vector2(-0.03, 0)
-shader_parameter/blend_factor = 0.5
-shader_parameter/scale1 = Vector2(1, 1)
-shader_parameter/scale2 = Vector2(1, 1)
-shader_parameter/wave_strength = 1.0
-shader_parameter/wave_scale = 0.02
-shader_parameter/wave_time = 0.0
-shader_parameter/pixelation_level = 256
-shader_parameter/FoamSize = 0.5
-shader_parameter/WaterOpacity = 1.0
-shader_parameter/FoamGlowIntensity = 0.5
-shader_parameter/amplitude = 2.0
-shader_parameter/speed = 13.0
-shader_parameter/direction = Vector2(1, 1)
-shader_parameter/WaveA = Vector4(0.3, 0, 0.4, 25)
-shader_parameter/WaveB = Vector4(-1, -1, 0.4, 70)
-shader_parameter/WaveC = Vector4(5, -1, 0.55, 50)
-shader_parameter/WaveD = Vector4(2, 1, 0.25, 60)
-shader_parameter/WaveE = Vector4(-4, -1, 0.2, 80)
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_k7wl0"]
-material = SubResource("ShaderMaterial_en2cn")
-flip_faces = true
+material = SubResource("ShaderMaterial_d5mx7")
 size = Vector2(100, 100)
 subdivide_width = 100
 subdivide_depth = 100
@@ -124,14 +89,20 @@ fog_light_energy = 0.99
 fog_density = 0.0
 fog_depth_curve = 0.466516
 
+[sub_resource type="CylinderMesh" id="CylinderMesh_ljlh8"]
+
 [node name="FishingGamePrototyping" type="Node3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.975504, 0, 0, 0, 0.975504, 0, 0, 0, 0.975504, 0, 0.25853, 0)
 mesh = SubResource("PlaneMesh_t27ug")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
-mesh = SubResource("PlaneMesh_k7wl0")
 skeleton = NodePath("../..")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_8aa0j")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(40.882, 0, 0, 0, 5.32799, 0, 0, 0, 30.7519, 0, 1.04956, 0)
+mesh = SubResource("CylinderMesh_ljlh8")
