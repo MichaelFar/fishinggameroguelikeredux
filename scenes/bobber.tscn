@@ -1,0 +1,34 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1tcb5ojibutw"]
+
+[ext_resource type="Script" uid="uid://dtdqcvxy7ccdw" path="res://scripts/floater.gd" id="1_2wku4"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_2wku4"]
+radius = 0.25
+height = 0.5
+
+[node name="bobber" type="RigidBody3D" node_paths=PackedStringArray("probeContainer")]
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+mass = 0.3
+linear_damp = 10.0
+script = ExtResource("1_2wku4")
+float_coefficient = 1.6
+water_drag = 0.2
+probeContainer = NodePath("ProbeContainer")
+physicsControlled = true
+
+[node name="ProbeContainer" type="Node3D" parent="."]
+transform = Transform3D(0.208894, 0, 0, 0, 0.43206, 0, 0, 0, 0.139328, 0, -0.616889, 0)
+
+[node name="Marker3D5" type="Marker3D" parent="ProbeContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15057, -0.0122889)
+
+[node name="Marker3D6" type="Marker3D" parent="ProbeContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91185, 1.15057, -0.0122889)
+
+[node name="Marker3D7" type="Marker3D" parent="ProbeContainer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5071, 1.15057, -0.0122889)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.57878, 0, 0, 0, 1.57878, 0, 0, 0, 1.57878, 0, 0.0461886, 0)
+mesh = SubResource("SphereMesh_2wku4")

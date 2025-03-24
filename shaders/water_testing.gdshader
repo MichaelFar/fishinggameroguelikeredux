@@ -51,13 +51,6 @@ vec3 GerstnerWave (vec4 wave, vec3 p, inout vec3 tangent, inout vec3 binormal)
 				vec3(1.0 - steepness * sin(f),
 				steepness * cos(f),
 				0.0));
-			//VERTEX.y = amplitude * sin(k * VERTEX.x + TIME);
-			//p.x += a * cos(f);
-			//p.y = a * sin(f);
-
-			//p.x += d.x * (a * cos(f));
-			//p.y = a * sin(f);
-			//p.z += d.y * (a * cos(f));
 
 			tangent += vec3(
 				-d.x * d.x * (steepness * sin(f)),
