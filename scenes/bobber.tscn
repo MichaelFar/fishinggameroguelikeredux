@@ -1,15 +1,24 @@
-[gd_scene load_steps=3 format=3 uid="uid://d1tcb5ojibutw"]
+[gd_scene load_steps=5 format=3 uid="uid://d1tcb5ojibutw"]
 
 [ext_resource type="Script" uid="uid://dtdqcvxy7ccdw" path="res://scripts/floater.gd" id="1_2wku4"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_2wku4"]
 radius = 0.25
-height = 0.5
+height = 0.3
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rn3pg"]
+albedo_color = Color(1, 0.0470588, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_1y8pg"]
+material = SubResource("StandardMaterial3D_rn3pg")
+radius = 0.25
+height = 0.3
+is_hemisphere = true
 
 [node name="bobber" type="RigidBody3D" node_paths=PackedStringArray("probeContainer")]
-axis_lock_angular_x = true
 axis_lock_angular_z = true
-mass = 0.3
+mass = 0.5
 linear_damp = 10.0
 script = ExtResource("1_2wku4")
 float_coefficient = 1.6
@@ -18,10 +27,7 @@ probeContainer = NodePath("ProbeContainer")
 physicsControlled = true
 
 [node name="ProbeContainer" type="Node3D" parent="."]
-transform = Transform3D(0.208894, 0, 0, 0, 0.43206, 0, 0, 0, 0.139328, 0, -0.616889, 0)
-
-[node name="Marker3D5" type="Marker3D" parent="ProbeContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15057, -0.0122889)
+transform = Transform3D(0.376009, 0, 0, 0, 0.43206, 0, 0, 0, 0.222925, 0, -0.639959, 0)
 
 [node name="Marker3D6" type="Marker3D" parent="ProbeContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91185, 1.15057, -0.0122889)
@@ -29,6 +35,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.91185, 1.15057, -0.0122889)
 [node name="Marker3D7" type="Marker3D" parent="ProbeContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5071, 1.15057, -0.0122889)
 
+[node name="Marker3D8" type="Marker3D" parent="ProbeContainer"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.297625, 1.15057, 3.30037)
+
+[node name="Marker3D9" type="Marker3D" parent="ProbeContainer"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.297625, 1.15057, -3.32495)
+
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1.57878, 0, 0, 0, 1.57878, 0, 0, 0, 1.57878, 0, 0.0461886, 0)
+transform = Transform3D(1.57878, 0, 0, 0, -1.57878, 1.38021e-07, 0, -1.38021e-07, -1.57878, 0, 0.0461886, 0)
 mesh = SubResource("SphereMesh_2wku4")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.57878, 0, 0, 0, 1.57878, -2.76043e-07, 0, 2.76043e-07, 1.57878, 0, 0.0461886, 0)
+mesh = SubResource("SphereMesh_1y8pg")
