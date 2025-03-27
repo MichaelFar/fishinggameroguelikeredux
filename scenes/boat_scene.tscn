@@ -99,22 +99,22 @@ libraries = {
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.00653, 0)
 
 [node name="Marker3D3" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.71701, -8.96024, 0.971087, 1.68875)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.14141, -8.96024, 0.971087, 3.12179)
 
 [node name="Marker3D6" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.71701, -8.96024, 0.971087, -1.7661)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.14141, -8.96024, 0.971087, -3.19914)
 
 [node name="Marker3D7" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 1.71701, -4.29235, 0.935298, -3.43406)
+transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 2.21043, -4.29235, 0.935298, -4.45172)
 
 [node name="Marker3D8" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1.7831, 0, 0, 0, 1, 0, 0, 0, 1.71701, -4.6072, 0.935298, 3.64838)
+transform = Transform3D(1.7831, 0, 0, 0, 1, 0, 0, 0, 2.21043, -4.6072, 0.935298, 4.66604)
 
 [node name="Marker3D9" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 1.71701, 3.48255, 0.935298, -3.43406)
+transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 2.21043, 3.48255, 0.935298, -4.45172)
 
 [node name="Marker3D10" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1.7831, 0, 0, 0, 1, 0, 0, 0, 1.71701, 3.7974, 0.935298, 3.64838)
+transform = Transform3D(1.7831, 0, 0, 0, 1, 0, 0, 0, 2.21043, 3.7974, 0.935298, 4.66604)
 
 [node name="Marker3D15" type="Marker3D" parent="Boat/ProbeContainer"]
 transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 1.71701, -5.99888, 0.198489, 0.0568193)
@@ -131,22 +131,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1.35913, 8.33014, 1.05121, 2.141
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.277421, 0.811616, -2.28053)
 shape = SubResource("BoxShape3D_nsi2y")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="CollisionShape3D3" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.291161, 0.811616, 2.26692)
 shape = SubResource("BoxShape3D_nsi2y")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="CollisionShape3D4" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.866027, 0, -0.500001, 0, 1, 0, 0.500001, 0, 0.866027, -4.78265, 0.811616, 1.43659)
 shape = SubResource("BoxShape3D_fbmf1")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="CollisionShape3D5" type="CollisionShape3D" parent="."]
 transform = Transform3D(0.866027, 0, 0.500001, 0, 1, 0, -0.500001, 0, 0.866027, -4.78265, 0.811616, -1.42842)
 shape = SubResource("BoxShape3D_fbmf1")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="CollisionShape3D2" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.71228, -0.335846, 0.0254822)
 shape = SubResource("BoxShape3D_xm3pv")
+debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.766633, 0)
@@ -154,3 +159,4 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.766633, 0)
 [node name="CollisionShape3D6" type="CollisionShape3D" parent="StaticBody3D"]
 transform = Transform3D(-1.19209e-07, 0, 1, 0, 1, 0, -1, 0, -1.19209e-07, 3.21735, 2.26571, -0.130466)
 shape = SubResource("BoxShape3D_fbmf1")
+debug_color = Color(0, 0.6, 0.7, 0.42)

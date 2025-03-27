@@ -12,6 +12,8 @@ extends RigidBody3D
 
 @export var physicsControlled : bool
 
+@export var useTorque : bool = true
+
 var hasHitWater : bool = false
 
 var probeList := []
@@ -26,7 +28,7 @@ var displacementAmount := 3.0
 func _ready():
 	
 	probeList = probeContainer.get_children()
-
+	#axis_lock_angular_z = true
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
@@ -46,15 +48,15 @@ func _physics_process(delta):
 		if height < wave_height:
 			#var displacementMult = clampf((-i.global_position.y / depthBeforeSubmerged) * displacementAmount, 0, 1)
 			if(physicsControlled):
+				
 				var buoyancy = clampf((wave_height - height), 0, 2) * 2
-				apply_force(Vector3(0, gravity * buoyancy * float_coefficient, 0), i.global_position)
+				var absolute_value_position = Vector3(i.global_position.x, absf(i.global_position.y), i.global_position.z)
+				apply_force(Vector3(0, gravity * buoyancy * float_coefficient, 0), absolute_value_position)
 				apply_central_force(buoyancy * water_drag * (-linear_velocity)  * float_coefficient)
 				apply_torque(buoyancy * -angular_velocity * water_angular_drag)
 			else:
 				global_position.y = wave_height
-		elif(physicsControlled):
-			pass
-			linear_velocity = linear_velocity.move_toward(Vector3.ZERO, delta * 3)
+		
 			
 		
 	

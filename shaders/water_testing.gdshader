@@ -83,9 +83,9 @@ void vertex() {
 	VERTEX.xyz = p;
 	NORMAL = normal;
 	TANGENT = tangent;
-	
+
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	
+
 }
 
 
@@ -103,7 +103,7 @@ void fragment() {
     vec4 water_color2 = texture(water_texture2, scrolledUV2);
     vec4 blended_water_color = mix(water_color1, water_color2, blend_factor);
 //
-   
+
     float depthValue = texture(DepthTexture, SCREEN_UV).r;
     vec4 worldPosition = INV_PROJECTION_MATRIX * vec4(SCREEN_UV * 2.0 - 1.0, depthValue, 1.0);
     worldPosition.xyz /= worldPosition.w;
@@ -111,11 +111,10 @@ void fragment() {
     float foamOpacity = 1.0 - foamEffect;
     float foamEffectRounded = round(foamOpacity);
     float finalOpacity = foamEffectRounded + WaterOpacity;
-	
+
     ALBEDO = blended_water_color.rgb * albedo;
     ALPHA = finalOpacity;
     EMISSION = vec3(foamEffectRounded) * FoamGlowIntensity;
     METALLIC = 0.0;
     ROUGHNESS = 1.0;
 }
-	

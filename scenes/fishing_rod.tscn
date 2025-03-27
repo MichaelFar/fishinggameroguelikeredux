@@ -68,18 +68,24 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_8baaf")
 
-[node name="fishing_rod" type="Node3D" node_paths=PackedStringArray("restingRod", "rodTiltBack", "rodTiltRight", "rodTiltLeft")]
+[node name="fishing_rod" type="Node3D" node_paths=PackedStringArray("restingRod", "rodTiltBack", "rodTiltRight", "rodTiltLeft", "spawnPoint")]
 script = ExtResource("1_h4s14")
 restingRod = NodePath("RodRest")
 rodTiltBack = NodePath("RodTiltBack")
 rodTiltRight = NodePath("RodTiltRight")
 rodTiltLeft = NodePath("RodTiltLeft")
 bobber_scene = ExtResource("2_1xn5j")
+spawnPoint = NodePath("RodRest/Marker3D")
+timeToCast = 0.3
+forceMagnitude = 30.0
 
 [node name="RodRest" type="MeshInstance3D" parent="."]
 transform = Transform3D(-3.57878e-08, 2.51078e-08, 1, 0.587291, 0.809375, 6.96203e-10, -0.809375, 0.587291, -4.37114e-08, 0, 0, -0.276)
 mesh = SubResource("ArrayMesh_nu6q6")
 skeleton = NodePath("")
+
+[node name="Marker3D" type="Marker3D" parent="RodRest"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 1.77636e-14, 0, 1, 1.15452, 0.281519, -0.00780081)
 
 [node name="RodTiltBack" type="MeshInstance3D" parent="."]
 transform = Transform3D(-3.78552e-08, 2.18557e-08, 1, 0.5, 0.866025, 0, -0.866025, 0.5, -4.37114e-08, -0.365395, -0.0182068, -0.276)
