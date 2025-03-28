@@ -96,7 +96,7 @@ libraries = {
 }
 
 [node name="ProbeContainer" type="Node3D" parent="Boat"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.00653, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3.32344, 0)
 
 [node name="Marker3D3" type="Marker3D" parent="Boat/ProbeContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.14141, -8.96024, 0.971087, 3.12179)
@@ -105,16 +105,16 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.14141, -8.96024, 0.971087, 3.1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 3.14141, -8.96024, 0.971087, -3.19914)
 
 [node name="Marker3D7" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 2.21043, -4.29235, 0.935298, -4.45172)
+transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 3.73541, -4.29235, 0.935298, -7.59691)
 
 [node name="Marker3D8" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1.7831, 0, 0, 0, 1, 0, 0, 0, 2.21043, -4.6072, 0.935298, 4.66604)
+transform = Transform3D(1.7831, 0, 0, 0, 1, 0, 0, 0, 3.73541, -4.6072, 0.935298, 7.81123)
 
 [node name="Marker3D9" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 2.21043, 3.48255, 0.935298, -4.45172)
+transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 3.73541, 3.48255, 0.935298, -7.59691)
 
 [node name="Marker3D10" type="Marker3D" parent="Boat/ProbeContainer"]
-transform = Transform3D(1.7831, 0, 0, 0, 1, 0, 0, 0, 2.21043, 3.7974, 0.935298, 4.66604)
+transform = Transform3D(1.7831, 0, 0, 0, 1, 0, 0, 0, 3.73541, 3.7974, 0.935298, 7.81123)
 
 [node name="Marker3D15" type="Marker3D" parent="Boat/ProbeContainer"]
 transform = Transform3D(1.6495, 0, 0, 0, 1, 0, 0, 0, 1.71701, -5.99888, 0.198489, 0.0568193)

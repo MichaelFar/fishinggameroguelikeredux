@@ -72,7 +72,7 @@ shader_parameter/scale1 = Vector2(-1, 1)
 shader_parameter/scale2 = Vector2(1, -1)
 shader_parameter/wave_strength = 1.0
 shader_parameter/wave_scale = 0.02
-shader_parameter/wave_time = 11.165
+shader_parameter/wave_time = 336.367
 shader_parameter/pixelation_level = 1024
 shader_parameter/FoamSize = 0.3
 shader_parameter/WaterOpacity = 1.0
@@ -80,11 +80,11 @@ shader_parameter/FoamGlowIntensity = 0.5
 shader_parameter/amplitude = 2.0
 shader_parameter/speed = 13.0
 shader_parameter/direction = Vector2(1, 1)
-shader_parameter/WaveA = Vector4(0.3, 0, 0.1, 12)
+shader_parameter/WaveA = Vector4(0.3, 0, 0.1, 4)
 shader_parameter/WaveB = Vector4(0.5, -1, 0.2, 10)
-shader_parameter/WaveC = Vector4(-4, 45, 0.1, 10)
-shader_parameter/WaveD = Vector4(6, 1, 0.1, 10)
-shader_parameter/WaveE = Vector4(0.3, -1, 0.2, 15)
+shader_parameter/WaveC = Vector4(-4, 4, 0.3, 10)
+shader_parameter/WaveD = Vector4(2, 1, 0.1, 5)
+shader_parameter/WaveE = Vector4(0.3, -1, 0.2, 12)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_kafcm"]
 material = SubResource("ShaderMaterial_pauh2")
@@ -109,11 +109,11 @@ environment = SubResource("Environment_rr7ax")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_kafcm")
 script = ExtResource("2_bnqq8")
-WaveA = Vector4(0.3, 0, 0.1, 12)
+WaveA = Vector4(0.3, 0, 0.1, 4)
 WaveB = Vector4(0.5, -1, 0.2, 10)
-WaveC = Vector4(-4, 45, 0.1, 10)
-WaveD = Vector4(6, 1, 0.1, 10)
-WaveE = Vector4(0.3, -1, 0.2, 15)
+WaveC = Vector4(-4, 4, 0.3, 10)
+WaveD = Vector4(2, 1, 0.1, 5)
+WaveE = Vector4(0.3, -1, 0.2, 12)
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshInstance3D"]
 skeleton = NodePath("../..")
@@ -127,8 +127,10 @@ disabled = true
 debug_color = Color(0, 0.6, 0.7, 0.42)
 
 [node name="ProtoController" parent="." instance=ExtResource("3_dieh6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.95561, 0)
 
 [node name="Boat" parent="." node_paths=PackedStringArray("waterPlane") instance=ExtResource("2_8p3my")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.06301, 0)
 waterPlane = NodePath("../MeshInstance3D")
 
 [node name="bobber" parent="." node_paths=PackedStringArray("waterPlane") instance=ExtResource("5_3c5tb")]

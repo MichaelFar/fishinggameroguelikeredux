@@ -14,6 +14,8 @@ extends RigidBody3D
 
 @export var useTorque : bool = true
 
+@export var lineConnector : Marker3D
+
 var hasHitWater : bool = false
 
 var probeList := []

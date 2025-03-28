@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=4 uid="uid://dctqc521qv4sq"]
+[gd_scene load_steps=9 format=4 uid="uid://dctqc521qv4sq"]
 
 [ext_resource type="Script" uid="uid://cf21mllgu1avv" path="res://scripts/fishing_rod.gd" id="1_h4s14"]
 [ext_resource type="PackedScene" uid="uid://d1tcb5ojibutw" path="res://scenes/bobber.tscn" id="2_1xn5j"]
+[ext_resource type="PackedScene" uid="uid://dtbxf46sypl3j" path="res://scenes/dynamic_line_mesh.tscn" id="3_1xn5j"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ayqvu"]
 albedo_color = Color(0.423529, 0.333333, 0.133333, 1)
@@ -68,7 +69,7 @@ _surfaces = [{
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_8baaf")
 
-[node name="fishing_rod" type="Node3D" node_paths=PackedStringArray("restingRod", "rodTiltBack", "rodTiltRight", "rodTiltLeft", "spawnPoint")]
+[node name="fishing_rod" type="Node3D" node_paths=PackedStringArray("restingRod", "rodTiltBack", "rodTiltRight", "rodTiltLeft", "spawnPoint", "rodTipMarker")]
 script = ExtResource("1_h4s14")
 restingRod = NodePath("RodRest")
 rodTiltBack = NodePath("RodTiltBack")
@@ -76,6 +77,8 @@ rodTiltRight = NodePath("RodTiltRight")
 rodTiltLeft = NodePath("RodTiltLeft")
 bobber_scene = ExtResource("2_1xn5j")
 spawnPoint = NodePath("RodRest/Marker3D")
+dynamicLineMeshScene = ExtResource("3_1xn5j")
+rodTipMarker = NodePath("RodRest/Marker3D")
 timeToCast = 0.3
 forceMagnitude = 30.0
 

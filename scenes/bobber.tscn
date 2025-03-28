@@ -16,7 +16,7 @@ radius = 0.25
 height = 0.3
 is_hemisphere = true
 
-[node name="bobber" type="RigidBody3D" node_paths=PackedStringArray("probeContainer")]
+[node name="bobber" type="RigidBody3D" node_paths=PackedStringArray("probeContainer", "lineConnector")]
 axis_lock_angular_x = true
 axis_lock_angular_y = true
 axis_lock_angular_z = true
@@ -25,6 +25,7 @@ script = ExtResource("1_2wku4")
 probeContainer = NodePath("MeshInstance3D2/ProbeContainer")
 physicsControlled = true
 useTorque = false
+lineConnector = NodePath("LineConnector")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.57878, 0, 0, 0, 1.57878, -2.76043e-07, 0, 2.76043e-07, 1.57878, 0, 0.276932, 0)
@@ -52,3 +53,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.19902, 0.350057, -0.813012
 
 [node name="Marker3D9" type="Marker3D" parent="MeshInstance3D2/ProbeContainer"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.812229, 2.48788e-07)
+
+[node name="LineConnector" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.705977, 0)
