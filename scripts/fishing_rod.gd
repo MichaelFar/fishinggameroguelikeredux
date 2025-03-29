@@ -63,17 +63,17 @@ func _input(event: InputEvent) -> void:
 		
 		if(event.is_action_released("draw")):
 			
-			transition_to_state(RODSTATES.RESTING)
+			call_deferred("transition_to_state",RODSTATES.RESTING)
 		
 		elif(event.is_action_released("release")):
 			
-			transition_to_state(RODSTATES.RELEASED)
+			call_deferred("transition_to_state",RODSTATES.RELEASED)
 			
 	if(rodState == RODSTATES.RELEASED):
 		
 		if(event.is_action_released("draw")):
 			
-			transition_to_state(RODSTATES.RESTING)
+			call_deferred("transition_to_state",RODSTATES.RESTING)
 			
 func launch_bobber():
 	
@@ -105,6 +105,7 @@ func spawn_line(object_to_follow):
 	currentLineInstance = line_instance
 
 func transition_to_state(new_state : RODSTATES):
+	var tween = get_tree().create_tween()
 	match new_state:
 		
 		RODSTATES.DRAWING:
@@ -118,28 +119,32 @@ func transition_to_state(new_state : RODSTATES):
 				currentBobber.queue_free()
 				
 			print("Entering drawing state from resting")
+			
 			rodState = RODSTATES.DRAWING
-			var tween = get_tree().create_tween()
 			
 			tween.set_trans(Tween.TRANS_BACK)
-			tween.tween_property(restingRod, "rotation_degrees:z", 65.0, timeToCast)
+			tween.tween_property(restingRod, "rotation_degrees:z", 65.0, timeToDraw)
 			tween.set_trans(Tween.TRANS_BACK)
-			tween.parallel().tween_property(restingRod, "position:z", finalDrawBackZ, timeToCast)
-		
+			tween.parallel().tween_property(restingRod, "position:z", finalDrawBackZ, timeToDraw)
+			
 		RODSTATES.RESTING:
+			
+			var temp_time_cast := 0.0
 			
 			rodState = RODSTATES.RESTING
 			print("Entering resting state from drawing")
-			var tween = get_tree().create_tween()
+			temp_time_cast = timeToCast
+			if(tween.is_running()):
+				temp_time_cast = timeToDraw
 			tween.set_trans(Tween.TRANS_BACK)
-			tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, timeToCast)
-			tween.parallel().tween_property(restingRod, "position:z", initialZPosition, timeToCast)
+			tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, temp_time_cast)
+			tween.parallel().tween_property(restingRod, "position:z", initialZPosition, temp_time_cast)
 		
 		RODSTATES.RELEASED:
 			
 			rodState = RODSTATES.RELEASED
 			print("Entering released state from drawing")
-			var tween = get_tree().create_tween()
+			
 			tween.set_trans(Tween.TRANS_BACK)
 			tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, timeToCast / 1.2)
 			tween.parallel().tween_property(restingRod, "position:z", initialZPosition, timeToCast / 1.2)
