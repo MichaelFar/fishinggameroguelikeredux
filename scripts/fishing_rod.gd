@@ -34,7 +34,7 @@ var restingAngle := 0.0
 
 var initialZPosition := 0.0
 
-enum RODSTATES {RESTING, DRAWING, RELEASED}
+enum RODSTATES {RESTING, DRAWING, RELEASED, REELING}
 
 var rodState : RODSTATES = RODSTATES.RESTING
 
@@ -63,18 +63,36 @@ func _input(event: InputEvent) -> void:
 		
 		if(event.is_action_released("draw")):
 			
-			call_deferred("transition_to_state",RODSTATES.RESTING)
+			transition_to_state(RODSTATES.RESTING)
 		
 		elif(event.is_action_released("release")):
 			
-			call_deferred("transition_to_state",RODSTATES.RELEASED)
+			transition_to_state(RODSTATES.RELEASED)
 			
 	if(rodState == RODSTATES.RELEASED):
 		
-		if(event.is_action_released("draw")):
+		if(event.is_action_pressed("reel")):
 			
-			call_deferred("transition_to_state",RODSTATES.RESTING)
+			transition_to_state(RODSTATES.REELING)
 			
+		if(event.is_action_pressed("draw")):
+			
+			transition_to_state(RODSTATES.DRAWING)
+			
+	if(rodState == RODSTATES.REELING):
+		
+		if(event.is_action_pressed("draw")):
+			
+			transition_to_state(RODSTATES.DRAWING)
+			
+		if(event.is_action_pressed("reel")):
+			
+			transition_to_state(RODSTATES.REELING)
+			
+		if(event.is_action_released("reel")):
+			
+			transition_to_state(RODSTATES.RELEASED)
+
 func launch_bobber():
 	
 	var bobber_object : RigidBody3D = bobber_scene.instantiate()
@@ -87,25 +105,33 @@ func launch_bobber():
 	#bobber_object.global_basis = bobber_object.global_basis.looking_at(restingRod.global_basis.x)
 	bobber_object.apply_central_impulse( restingRod.global_basis.x * forceMagnitude)
 	print("Force applied is " + str(restingRod.global_basis.x * forceMagnitude))
+	bobber_object.basis.rotated(Vector3.UP, bobber_object.basis.x.angle_to(global_position))
+	
+	if(currentBobber):
 		
+		currentBobber.queue_free()
+		
+		if(currentLineInstance):
+			
+			currentLineInstance.queue_free()
+			
 	currentBobber = bobber_object
 	
 	spawn_line(currentBobber)
 	
-func draw_line():
-	
-	pass
 
 func spawn_line(object_to_follow):
 	
 	var line_instance := dynamicLineMeshScene.instantiate()
 	line_instance.objectToFollow = object_to_follow
 	line_instance.spawnObject = rodTipMarker
-	add_child(line_instance)
+	call_deferred("add_child", line_instance)
 	currentLineInstance = line_instance
 
 func transition_to_state(new_state : RODSTATES):
+	
 	var tween = get_tree().create_tween()
+	
 	match new_state:
 		
 		RODSTATES.DRAWING:
@@ -134,8 +160,11 @@ func transition_to_state(new_state : RODSTATES):
 			rodState = RODSTATES.RESTING
 			print("Entering resting state from drawing")
 			temp_time_cast = timeToCast
+			
 			if(tween.is_running()):
+				
 				temp_time_cast = timeToDraw
+			
 			tween.set_trans(Tween.TRANS_BACK)
 			tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, temp_time_cast)
 			tween.parallel().tween_property(restingRod, "position:z", initialZPosition, temp_time_cast)
@@ -148,4 +177,25 @@ func transition_to_state(new_state : RODSTATES):
 			tween.set_trans(Tween.TRANS_BACK)
 			tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, timeToCast / 1.2)
 			tween.parallel().tween_property(restingRod, "position:z", initialZPosition, timeToCast / 1.2)
-			tween.finished.connect(launch_bobber)
+			
+			if(currentBobber == null):
+				
+				tween.finished.connect(launch_bobber)
+			
+		RODSTATES.REELING:
+			tween.stop()
+			rodState = RODSTATES.REELING
+			print("Reeling")
+			reel_loop()
+			
+func reel_loop():
+	
+	if(currentBobber):
+		
+		currentBobber.apply_central_force(currentBobber.global_position.direction_to(rodTipMarker.global_position) * 10)
+	
+	if(rodState == RODSTATES.REELING):
+		
+		var timer = get_tree().create_timer(0.01)
+		
+		timer.timeout.connect(reel_loop)

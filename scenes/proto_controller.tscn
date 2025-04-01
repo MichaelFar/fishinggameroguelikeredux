@@ -16,8 +16,10 @@ height = 1.8
 
 [node name="ProtoController" type="CharacterBody3D" node_paths=PackedStringArray("head", "collider")]
 script = ExtResource("1_ucva2")
+can_jump = false
 head = NodePath("Head")
 collider = NodePath("Collider")
+gravity_mod = 0.2
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)

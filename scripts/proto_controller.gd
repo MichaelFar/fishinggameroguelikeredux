@@ -30,7 +30,7 @@ extends CharacterBody3D
 @export var sprint_speed : float = 10.0
 ## How fast do we freefly?
 @export var freefly_speed : float = 25.0
-
+@export var gravity_mod : float = 1.0
 
 
 @export_group("Input Actions")
@@ -65,10 +65,12 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	# Mouse capturing
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		
 		capture_mouse()
+		
 	if Input.is_key_pressed(KEY_ESCAPE):
+		
 		release_mouse()
-	
 	# Look around
 	if mouse_captured and event is InputEventMouseMotion:
 		rotate_look(event.relative)
@@ -92,7 +94,7 @@ func _physics_process(delta: float) -> void:
 	# Apply gravity to velocity
 	if has_gravity:
 		if not is_on_floor():
-			velocity += get_gravity() * delta
+			velocity += get_gravity() * gravity_mod * delta
 
 	# Apply jumping
 	if can_jump:
@@ -122,11 +124,11 @@ func _physics_process(delta: float) -> void:
 	# Use velocity to actually move
 	move_and_slide()
 
-
 ## Rotate us to look around.
 ## Base of controller rotates around y (left/right). Head rotates around x (up/down).
 ## Modifies look_rotation based on rot_input, then resets basis and rotates by look_rotation.
 func rotate_look(rot_input : Vector2):
+	
 	look_rotation.x -= rot_input.y * look_speed
 	look_rotation.x = clamp(look_rotation.x, deg_to_rad(-85), deg_to_rad(85))
 	look_rotation.y -= rot_input.x * look_speed
@@ -135,26 +137,27 @@ func rotate_look(rot_input : Vector2):
 	head.transform.basis = Basis()
 	head.rotate_x(look_rotation.x)
 
-
 func enable_freefly():
+	
 	collider.disabled = true
 	freeflying = true
 	velocity = Vector3.ZERO
 
 func disable_freefly():
+	
 	collider.disabled = false
 	freeflying = false
 
 
 func capture_mouse():
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	mouse_captured = true
 
-
 func release_mouse():
+	
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	mouse_captured = false
-
 
 ## Checks if some Input Actions haven't been created.
 ## Disables functionality accordingly.
@@ -180,3 +183,6 @@ func check_input_mappings():
 	if can_freefly and not InputMap.has_action(input_freefly):
 		push_error("Freefly disabled. No InputAction found for input_freefly: " + input_freefly)
 		can_freefly = false
+
+func set_can_move(new_value : bool):
+	can_move = new_value
