@@ -97,13 +97,13 @@ mesh = SubResource("ArrayMesh_h4s14")
 skeleton = NodePath("")
 
 [node name="RodTiltRight" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.15416, 0.267013, 0.951283, 0.325467, 0.895334, -0.304052, -0.932902, 0.356484, 0.0511209, 0.220254, -0.0773415, -0.276)
+transform = Transform3D(0.15416, 0.267013, 0.951283, 0.55583, 0.772561, -0.306923, -0.816877, 0.576067, -0.0293154, 0.220254, -0.0773415, -0.276)
 visible = false
 mesh = SubResource("ArrayMesh_h4s14")
 skeleton = NodePath("")
 
 [node name="RodTiltLeft" type="MeshInstance3D" parent="."]
-transform = Transform3D(-0.154509, -0.267616, 0.951057, 0.326071, 0.894867, 0.304779, -0.932633, 0.357203, -0.0510025, -0.884194, -0.0500491, -0.276)
+transform = Transform3D(-0.154509, -0.267616, 0.951057, 0.556344, 0.771924, 0.307594, -0.816461, 0.57664, 0.029618, -0.884194, -0.0500491, -0.276)
 visible = false
 mesh = SubResource("ArrayMesh_h4s14")
 skeleton = NodePath("")

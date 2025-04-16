@@ -19,6 +19,8 @@ extends CharacterBody3D
 @export var head: Node3D
 @export var collider: CollisionShape3D
 
+@export var rod : Node3D
+
 @export_group("Speeds")
 ## Look around rotation speed.
 @export var look_speed : float = 0.002
@@ -61,7 +63,7 @@ func _ready() -> void:
 	check_input_mappings()
 	look_rotation.y = rotation.y
 	look_rotation.x = head.rotation.x
-
+	rod.released_bobber.connect(set_can_move)
 func _unhandled_input(event: InputEvent) -> void:
 	# Mouse capturing
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):

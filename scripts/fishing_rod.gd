@@ -36,9 +36,15 @@ var initialZPosition := 0.0
 
 enum RODSTATES {RESTING, DRAWING, RELEASED, REELING}
 
+enum RODTILTSTATES {LEFT, RIGHT, BACK, RESTING}
+
+var rodTiltState : RODTILTSTATES = RODTILTSTATES.RESTING
+
 var rodState : RODSTATES = RODSTATES.RESTING
 
 var currentBobber : RigidBody3D
+
+var restingTransform : Transform3D
 
 signal released_bobber
 
@@ -46,6 +52,7 @@ func _ready():
 	
 	initialZPosition = restingRod.position.z
 	restingAngle = restingRod.rotation_degrees.z
+	restingTransform = restingRod.transform
 	
 func _physics_process(delta: float) -> void:
 	
@@ -78,6 +85,8 @@ func _input(event: InputEvent) -> void:
 		if(event.is_action_pressed("draw")):
 			
 			transition_to_state(RODSTATES.DRAWING)
+		
+		process_rod_direction_input(event)
 			
 	if(rodState == RODSTATES.REELING):
 		
@@ -93,6 +102,47 @@ func _input(event: InputEvent) -> void:
 			
 			transition_to_state(RODSTATES.RELEASED)
 
+func process_rod_direction_input(event : InputEvent):
+	
+	var event_string = event.as_text()
+	
+	var event_is_direction := event.is_action_pressed("left") || event.is_action_pressed("right") || event.is_action_pressed("back")
+	var event_is_released := event.is_action_released("left") || event.is_action_released("right") || event.is_action_released("back")
+	if(event.is_action_pressed("left") && !event.is_action_pressed("right") && !event.is_action_pressed("back")):
+		
+		var tween = get_tree().create_tween()
+		tween.set_ease(tween.EASE_OUT)
+		tween.set_trans(tween.TRANS_BACK)
+		tween.tween_property(restingRod, "transform", rodTiltLeft.transform, 0.6)
+		rodTiltState = RODTILTSTATES.LEFT
+	if(event.is_action_pressed("right")&& !event.is_action_pressed("left") && !event.is_action_pressed("back")):
+		
+		var tween = get_tree().create_tween()
+		tween.set_ease(tween.EASE_OUT)
+		tween.set_trans(tween.TRANS_BACK)
+		tween.tween_property(restingRod, "transform", rodTiltRight.transform, 0.6)
+		rodTiltState = RODTILTSTATES.RIGHT
+	if(event.is_action_pressed("back") && !event.is_action_pressed("right") && !event.is_action_pressed("left")):
+		
+		var tween = get_tree().create_tween()
+		tween.set_ease(tween.EASE_OUT)
+		tween.set_trans(tween.TRANS_BACK)
+		tween.tween_property(restingRod, "transform", rodTiltBack.transform, 0.6)
+		rodTiltState = RODTILTSTATES.BACK
+	#if(((event.is_action_released("left") 
+	#|| event.is_action_released("right") 
+	#|| event.is_action_released("back")) 
+	#&& (!event.is_action_released("left") 
+	#|| !event.is_action_released("right") 
+	#|| !event.is_action_released("back"))) 
+	#&& !event_is_direction):
+	#if(event_is_released && !event_is_direction):	
+		#print("Releasing input direction")
+		#var tween = get_tree().create_tween()
+		#tween.set_ease(tween.EASE_OUT)
+		#tween.set_trans(tween.TRANS_BACK)
+		#tween.tween_property(restingRod, "transform", restingTransform, 0.6)
+		
 func launch_bobber():
 	
 	var bobber_object : RigidBody3D = bobber_scene.instantiate()
@@ -119,7 +169,6 @@ func launch_bobber():
 	
 	spawn_line(currentBobber)
 	
-
 func spawn_line(object_to_follow):
 	
 	var line_instance := dynamicLineMeshScene.instantiate()
@@ -146,17 +195,21 @@ func transition_to_state(new_state : RODSTATES):
 				
 			print("Entering drawing state from resting")
 			
-			rodState = RODSTATES.DRAWING
+			#rodState = RODSTATES.DRAWING
 			
 			tween.set_trans(Tween.TRANS_BACK)
 			tween.tween_property(restingRod, "rotation_degrees:z", 65.0, timeToDraw)
 			tween.set_trans(Tween.TRANS_BACK)
 			tween.parallel().tween_property(restingRod, "position:z", finalDrawBackZ, timeToDraw)
+			#tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, timeToDraw)
+			#tween.parallel().tween_property(restingRod, "rotation:y", rotation.y, 0.6)
+			
+			rodState = RODSTATES.DRAWING
 			
 		RODSTATES.RESTING:
 			
 			var temp_time_cast := 0.0
-			
+			released_bobber.emit(true)
 			rodState = RODSTATES.RESTING
 			print("Entering resting state from drawing")
 			temp_time_cast = timeToCast
@@ -170,7 +223,7 @@ func transition_to_state(new_state : RODSTATES):
 			tween.parallel().tween_property(restingRod, "position:z", initialZPosition, temp_time_cast)
 		
 		RODSTATES.RELEASED:
-			
+			released_bobber.emit(false)
 			rodState = RODSTATES.RELEASED
 			print("Entering released state from drawing")
 			
@@ -183,9 +236,18 @@ func transition_to_state(new_state : RODSTATES):
 				tween.finished.connect(launch_bobber)
 			
 		RODSTATES.REELING:
-			tween.stop()
+			
+			#tween.stop()
+			#tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, timeToCast)
+			#tween.parallel().tween_property(restingRod, "position:z", initialZPosition, timeToCast)
 			rodState = RODSTATES.REELING
 			print("Reeling")
+			#if(event_is_released && !event_is_direction):	
+			#print("Releasing input direction")
+			#var tween = get_tree().create_tween()
+			tween.set_ease(tween.EASE_OUT)
+			tween.set_trans(tween.TRANS_BACK)
+			tween.tween_property(restingRod, "transform", restingTransform, 0.6)
 			reel_loop()
 			
 func reel_loop():

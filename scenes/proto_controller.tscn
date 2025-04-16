@@ -14,11 +14,12 @@ height = 1.8
 radius = 0.4
 height = 1.8
 
-[node name="ProtoController" type="CharacterBody3D" node_paths=PackedStringArray("head", "collider")]
+[node name="ProtoController" type="CharacterBody3D" node_paths=PackedStringArray("head", "collider", "rod")]
 script = ExtResource("1_ucva2")
 can_jump = false
 head = NodePath("Head")
 collider = NodePath("Collider")
+rod = NodePath("Head/RodRestingPosition")
 gravity_mod = 0.2
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
@@ -36,6 +37,7 @@ debug_color = Color(0, 0.6, 0.7, 0.42)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Head"]
+fov = 100.2
 
 [node name="RodRestingPosition" parent="Head" instance=ExtResource("2_rji43")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.397427, -0.21, -0.209639)
