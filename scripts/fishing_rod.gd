@@ -30,7 +30,11 @@ var globalDelta := 0.0
 
 var castAlpha := 0.0
 
-var restingAngle := 0.0
+var restingAngleZ := 0.0
+
+var restingAngleY := 0.0
+
+var restingAngleX := 0.0
 
 var initialZPosition := 0.0
 
@@ -46,14 +50,18 @@ var currentBobber : RigidBody3D
 
 var restingTransform : Transform3D
 
+var initialPosition : Vector3
+
 signal released_bobber
 
 func _ready():
 	
 	initialZPosition = restingRod.position.z
-	restingAngle = restingRod.rotation_degrees.z
+	restingAngleZ = restingRod.rotation_degrees.z
 	restingTransform = restingRod.transform
-	
+	initialPosition = restingRod.position
+	restingAngleY = restingRod.rotation.y
+	restingAngleX = restingRod.rotation.x
 func _physics_process(delta: float) -> void:
 	
 	globalDelta = delta
@@ -195,12 +203,19 @@ func transition_to_state(new_state : RODSTATES):
 				
 			print("Entering drawing state from resting")
 			
-			#rodState = RODSTATES.DRAWING
+			rodState = RODSTATES.DRAWING
+			tween.set_ease(tween.EASE_OUT)
+			tween.set_trans(tween.TRANS_BACK)
 			
+			tween.tween_property(restingRod, "rotation_degrees:z", restingAngleZ, timeToDraw)
+			tween.parallel().tween_property(restingRod, "position", initialPosition, timeToDraw)
+			
+			tween.parallel().tween_property(restingRod, "rotation:x", restingAngleX, timeToDraw)
 			tween.set_trans(Tween.TRANS_BACK)
-			tween.tween_property(restingRod, "rotation_degrees:z", 65.0, timeToDraw)
+			tween.parallel().tween_property(restingRod, "rotation_degrees:z", 65.0, timeToDraw)
 			tween.set_trans(Tween.TRANS_BACK)
 			tween.parallel().tween_property(restingRod, "position:z", finalDrawBackZ, timeToDraw)
+			
 			#tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, timeToDraw)
 			#tween.parallel().tween_property(restingRod, "rotation:y", rotation.y, 0.6)
 			
@@ -219,7 +234,7 @@ func transition_to_state(new_state : RODSTATES):
 				temp_time_cast = timeToDraw
 			
 			tween.set_trans(Tween.TRANS_BACK)
-			tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, temp_time_cast)
+			tween.tween_property(restingRod, "rotation_degrees:z", restingAngleZ, temp_time_cast)
 			tween.parallel().tween_property(restingRod, "position:z", initialZPosition, temp_time_cast)
 		
 		RODSTATES.RELEASED:
@@ -228,7 +243,7 @@ func transition_to_state(new_state : RODSTATES):
 			print("Entering released state from drawing")
 			
 			tween.set_trans(Tween.TRANS_BACK)
-			tween.tween_property(restingRod, "rotation_degrees:z", restingAngle, timeToCast / 1.2)
+			tween.tween_property(restingRod, "rotation_degrees:z", restingAngleZ, timeToCast / 1.2)
 			tween.parallel().tween_property(restingRod, "position:z", initialZPosition, timeToCast / 1.2)
 			
 			if(currentBobber == null):
